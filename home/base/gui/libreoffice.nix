@@ -1,4 +1,4 @@
 { pkgs, ... }:
 {
-  # home.packages = [ pkgs.libreoffice ];
+  home.packages = [ pkgs.libreoffice ];
 }

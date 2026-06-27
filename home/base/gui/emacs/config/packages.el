@@ -16,6 +16,7 @@
 (package! org-roam-ui)
 (package! tree-sitter)
 (package! transient)
+(package! typescript-ts-mode)
 
 (package! evil-colemak-basics :recipe (:host github :repo "wbolster/emacs-evil-colemak-basics"))
 
@@ -26,6 +27,22 @@
 (package! majutsu :recipe (:host github :repo "0WD0/majutsu"))
 
 (package! grease :recipe (:host github :repo "mwac-dev/grease.el"))
+
+(package! harpoon)
+(package! docker)
+
+(package! vulpea)
+(package! vulpea-ui)
+(package! vulpea-journal)
+(package! consult-vulpea)
+
+(package! eldoc-box)
+
+(package! org-transclusion)
+(package! ox-gfm)
+(package! org-super-agenda)
+
+
 
 
 ;; To install a package directly from a remote git repo, you must specify a

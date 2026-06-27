@@ -28,7 +28,7 @@
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
-;
+                                        ;
 ;; Theme options for doom-gruvbox-light
 (setq
  ;; brighter mode-line?
@@ -127,8 +127,6 @@
 ;; Angular templates: use web-mode
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
 
-;; TypeScript
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
 
 ;; Optional: Angular component templates sometimes benefit from slightly tweaked web-mode settings
 (after! web-mode
@@ -162,6 +160,15 @@
    (lambda ()
      (when (derived-mode-p 'majutsu-log-mode)
        (evil-emacs-state)))))
+
+(with-eval-after-load 'majutsu
+  ;; Ensure Majutsu's Evil setup runs if available
+  (when (fboundp 'majutsu-evil-setup)
+    (majutsu-evil-setup))
+
+  ;; Bind relevant keys in Evil normal state for the Majutsu log UI
+  (evil-define-key 'normal majutsu-log-mode-map
+    "G" #'majutsu-git-transient))
 
 (defvar my/j-map (make-sparse-keymap)
   "My custom leader submap for SPC j …")
@@ -352,3 +359,235 @@
            (my/angular-project-p)))
     :add-on? t
     :server-id 'angular-ls-webmode)))
+
+(after! corfu
+  (setq corfu-auto t
+        corfu-auto-prefix 1
+        corfu-auto-delay 0
+        corfu-preselect 'first
+        corfu-cycle t)
+
+  ;; keybindings while popup is active
+  (map! :map corfu-map
+        :i "C-n" #'corfu-next
+        :i "C-p" #'corfu-previous
+        :i "C-y" #'corfu-insert
+        :i "TAB" #'corfu-insert
+        :i [tab] #'corfu-insert
+
+        ;; FIX: make backspace delete normally while corfu popup is active
+        :i "DEL" #'evil-delete-backward-char
+        :i [backspace] #'evil-delete-backward-char))
+
+;; Disable Corfu in the minibuffer (so ":" / ":w" / ":q" don't auto-suggest)
+(after! corfu
+  (defun my/corfu-disable-in-minibuffer ()
+    (when (minibufferp)
+      (setq-local corfu-auto nil)
+      (corfu-mode -1)))
+  (add-hook 'minibuffer-setup-hook #'my/corfu-disable-in-minibuffer))
+
+
+;; Global case-insensitive completion (minibuffer + capf/corfu)
+(setq completion-ignore-case t
+      read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t)
+
+;; Doom commonly uses orderless; disable “smart case” so uppercase doesn't force case-sensitive matching
+(after! orderless
+  (setq orderless-smart-case nil))
+
+
+(add-hook 'typescript-ts-mode-hook #'lsp-deferred)
+(add-hook 'typescript-ts-mode-hook #'lsp)
+
+(setq major-mode-remap-alist
+      (append major-mode-remap-alist
+              '((typescript-mode . typescript-ts-mode)
+                (tsx-mode . tsx-ts-mode))))
+
+;; Also ensure file extensions go to ts modes
+(add-to-list 'auto-mode-alist '("\\.ts\\'"  . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+
+(after! lsp-mode
+  ;; Don't run LSP in diff buffers (majutsu / patches / vc diffs).
+  (add-hook 'diff-mode-hook (lambda () (lsp-mode -1))))
+
+
+;; Make Ediff temp/control buffers belong to the same project as the compared files.
+(after! ediff
+  (defun +my/ediff--project-root-from (buf)
+    "Return a sensible project root for BUF (Projectile/Doom/project.el)."
+    (when (buffer-live-p buf)
+      (with-current-buffer buf
+        (or (and (fboundp 'doom-project-root) (doom-project-root))
+            (and (fboundp 'projectile-project-root) (projectile-project-root))
+            (when-let ((proj (project-current nil default-directory)))
+              (car (project-roots proj)))
+            default-directory))))
+
+  (defun +my/ediff-set-default-directory ()
+    "Set `default-directory` in Ediff buffers to the compared buffers' project root."
+    (let ((root (or (+my/ediff--project-root-from ediff-buffer-A)
+                    (+my/ediff--project-root-from ediff-buffer-B)
+                    (+my/ediff--project-root-from ediff-buffer-C))))
+      (when root
+        ;; Control panel
+        (when (buffer-live-p ediff-control-buffer)
+          (with-current-buffer ediff-control-buffer
+            (setq default-directory root)))
+        ;; Sometimes Ediff uses dedicated diff/registry buffers too
+        (dolist (b (list ediff-buffer-A ediff-buffer-B ediff-buffer-C))
+          (when (buffer-live-p b)
+            (with-current-buffer b
+              (setq default-directory root)))))))
+
+  ;; Run after Ediff has created its buffers/windows
+  (add-hook 'ediff-after-setup-windows-hook #'+my/ediff-set-default-directory))
+
+;; (map! :n "C-s" 'harpoon-quick-menu-hydra)
+;; (map! :n "C-s f" 'harpoon-add-file)
+;; (after! harpoon
+;;   ;; Jump keys for slots 1..9 (use whatever you want here)
+;;   (defconst my/harpoon-hydra-keys
+;;     '("m" "n" "e" "i" "o" "6" "7" "8" "9"))
+
+;;   (defun harpoon--hydra-candidates (method)
+;;     "Candidates for harpoon hydras.
+;; METHOD is a string prefix like \"harpoon-go-to-\" or \"harpoon-delete-\"."
+;;     (let* ((line-number 0)
+;;            (files (seq-take (delete "" (split-string (harpoon--get-file-text) "\n")) 9)))
+;;       (mapcar
+;;        (lambda (item)
+;;          (setq line-number (1+ line-number))
+;;          (let ((key (nth (1- line-number) my/harpoon-hydra-keys)))
+;;            (list (or key (format "%s" line-number)) ; fallback if list too short
+;;                  (intern (concat method (format "%s" line-number)))
+;;                  (harpoon--format-item-name item)
+;;                  :column (if (< line-number 6) "1-5" "6-9"))))
+;;        files))))
+
+;; Open the hydra (this function already calls the hydra body internally)
+;; (map! :n "C-s" #'harpoon-quick-menu-hydra)
+
+;; (map! :n "C-s" #'harpoon-quick-menu-hydra/body)
+
+;; (map! :leader "j c" 'harpoon-clear)
+;; (map! :leader "j t" 'harpoon-toggle-file)
+;; (map! "M-n" 'harpoon-go-to-1)
+;; (map! "M-e" 'harpoon-go-to-2)
+;; (map! "M-i" 'harpoon-go-to-3)
+;; (map! "M-o" 'harpoon-go-to-4)
+(map! :n "C-s n" (cmd! (+workspace/switch-to 0))
+      :n "C-s e" (cmd! (+workspace/switch-to 1))
+      :n "C-s i" (cmd! (+workspace/switch-to 2))
+      :n "C-s o" (cmd! (+workspace/switch-to 3))
+      :n "C-s u" (cmd! (+workspace/switch-to 4)))
+;; (map! :leader "5" 'harpoon-go-to-5)
+;; (map! :leader "6" 'harpoon-go-to-6)
+;; (map! :leader "7" 'harpoon-go-to-7)
+;; (map! :leader "8" 'harpoon-go-to-8)
+;; (map! :leader "9" 'harpoon-go-to-9)
+
+(defun my/org-refresh-dailies-call ()
+  "Refresh the `#+CALL: dailies-links()` under the *Daily Notes* heading only."
+  (when (derived-mode-p 'org-mode)
+    (save-excursion
+      (goto-char (point-min))
+      (when (re-search-forward "^\\*+[ \t]+Daily Notes\\b" nil t)
+        (org-narrow-to-subtree)
+        (goto-char (point-min))
+        (when (re-search-forward "^[ \t]*#\\+CALL:[ \t]*dailies-links()" nil t)
+          (beginning-of-line)
+          (org-babel-lob-execute-maybe))
+        (widen)))))
+
+(add-hook 'find-file-hook #'my/org-refresh-dailies-call)
+
+;; uses git instead, so i dont have to worry about cache invalidation if creating files outside of emacs
+(after! projectile
+  (setq projectile-indexing-method 'alien)
+  (setq projectile-enable-caching nil))
+
+;; center my shit
+(after! evil
+  (defun my/evil-scroll-down-and-center ()
+    (interactive)
+    (call-interactively #'evil-scroll-down)
+    (recenter))
+
+  (defun my/evil-scroll-up-and-center ()
+    (interactive)
+    (call-interactively #'evil-scroll-up)
+    (recenter))
+
+  ;; Normal state (Vim-like)
+  (define-key evil-normal-state-map (kbd "C-d") #'my/evil-scroll-down-and-center)
+  (define-key evil-normal-state-map (kbd "C-u") #'my/evil-scroll-up-and-center)
+
+  ;; Optional: also in visual state
+  (define-key evil-visual-state-map (kbd "C-d") #'my/evil-scroll-down-and-center)
+  (define-key evil-visual-state-map (kbd "C-u") #'my/evil-scroll-up-and-center))
+
+
+
+(setq vulpea-db-sync-directories '("~/org/roam"))
+
+
+(after! grease
+  (map! :leader
+        "e" #'grease-open))
+
+(after! lsp-ui
+  ;; Force peek UI even when there's only one definition location
+  (setq lsp-ui-peek-always-show t
+
+        ;; (optional) make sure peek is enabled + tune sizing
+        lsp-ui-peek-enable t
+        lsp-ui-peek-peek-height 20
+        lsp-ui-peek-list-width 60))
+
+
+(after! org
+  (setq org-preview-latex-default-process 'dvisvgm)
+
+  ;; Optional but usually fixes the “white box” on dark themes
+  (setq org-format-latex-options
+        (plist-put org-format-latex-options :background "Transparent")))
+
+(eval-after-load "org"
+  '(require 'ox-gfm nil t))
+
+(use-package! org-transclusion
+  :after org
+  :config
+  (add-to-list 'org-transclusion-extensions 'org-transclusion-indent-mode)
+  (require 'org-transclusion-indent-mode))
+
+(after! org-agenda
+  (require 'org-super-agenda)
+  (org-super-agenda-mode))
+
+(after! org
+  (setq org-agenda-custom-commands
+        '(("a" "Agenda"
+           ((agenda "")
+            (alltodo ""))
+           ((org-super-agenda-groups
+             '((:name "Today"
+                :scheduled today)
+
+               (:name "Due Today"
+                :deadline today)
+
+               (:name "Overdue"
+                :deadline past)
+
+               (:name "Important"
+                :priority "A")
+
+               (:name "Work"
+                :tag "work")
+
+               (:discard (:anything t)))))))))

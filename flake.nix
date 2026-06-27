@@ -51,14 +51,10 @@
       url = "github:Mic92/nix-ld";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    quickshell = {
-      url = "github:outfoxxed/quickshell";
+
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.quickshell.follows = "quickshell"; # Use same quickshell version
     };
   };
   outputs =
@@ -70,7 +66,7 @@
       nixos-wsl,
       lanzaboote,
       nix-ld,
-      noctalia,
+      dms,
       ...
     }:
     {
@@ -87,7 +83,6 @@
             modules = [
               ./hosts/gpc
               nix-ld.nixosModules.nix-ld
-              noctalia.nixosModules.default
 
               home-manager.nixosModules.home-manager
               {
@@ -98,7 +93,6 @@
                 home-manager.extraSpecialArgs = inputs // specialArgs;
                 home-manager.users.${username} = {
                   imports = [
-                    noctalia.homeModules.default
                     (import ./hosts/gpc/home.nix)
                   ];
                 };
@@ -224,7 +218,6 @@
 
             modules = [
               ./hosts/g8
-              noctalia.nixosModules.default
 
               # ./users/${username}/nixos.nix
               lanzaboote.nixosModules.lanzaboote
@@ -239,9 +232,89 @@
                 # home-manager.users.${username} = import ./hosts/g8/home.nix;
                 home-manager.users.${username} = {
                   imports = [
-                    noctalia.homeModules.default
                     (import ./hosts/g8/home.nix)
                   ];
+                };
+                # home-manager.services.wayland.windowManager.hyprland = {
+                #   monitor = "eDP-1,highres,auto,1.5,bitdepth,10";
+                # };
+              }
+            ];
+          };
+        l6 =
+          let
+            username = "ove";
+            specialArgs = { inherit username; };
+          in
+          nixpkgs.lib.nixosSystem {
+            inherit specialArgs;
+            system = "x86_64-linux";
+
+            modules = [
+              ./hosts/l6
+
+              # ./users/${username}/nixos.nix
+              # lanzaboote.nixosModules.lanzaboote
+              nix-ld.nixosModules.nix-ld
+              nixos-hardware.nixosModules.lenovo-thinkpad
+
+              home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+
+                home-manager.extraSpecialArgs = inputs // specialArgs;
+                # home-manager.users.${username} = import ./hosts/g8/home.nix;
+                home-manager.users.${username} = {
+                  imports = [
+                    dms.homeModules.dank-material-shell
+                    (import ./hosts/l6/home.nix)
+                  ];
+                  home.username = username;
+                  home.homeDirectory = "/home/${username}"; # add this
+                };
+                # home-manager.services.wayland.windowManager.hyprland = {
+                #   monitor = "eDP-1,highres,auto,1.5,bitdepth,10";
+                # };
+              }
+            ];
+          };
+
+        idpro =
+          let
+            username = "magnus";
+            specialArgs = { inherit username; };
+          in
+          nixpkgs.lib.nixosSystem {
+            inherit specialArgs;
+            system = "x86_64-linux";
+
+            modules = [
+              ./hosts/idpro
+              ./modules/nixos/base/amd.nix
+              # ./users/${username}/nixos.nix
+              # lanzaboote.nixosModules.lanzaboote
+              nix-ld.nixosModules.nix-ld
+              # nixos-hardware.nixosModules.lenovo-ideapad
+              nixos-hardware.nixosModules.lenovo-ideapad-16ahp9
+              dms.nixosModules.dank-material-shell
+              dms.nixosModules.greeter
+
+              home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+
+                home-manager.extraSpecialArgs = inputs // specialArgs;
+                # home-manager.users.${username} = import ./hosts/g8/home.nix;
+                home-manager.users.${username} = {
+                  imports = [
+                    # dms.homeModules.dank-material-shell
+                    # dms.homeModules.niri
+                    (import ./hosts/idpro/home.nix)
+                  ];
+                  home.username = username;
+                  home.homeDirectory = "/home/${username}"; # add this
                 };
                 # home-manager.services.wayland.windowManager.hyprland = {
                 #   monitor = "eDP-1,highres,auto,1.5,bitdepth,10";

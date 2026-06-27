@@ -51,10 +51,30 @@
     rsync
     pavucontrol
     tlrc
-    btop
     playerctl
     mlocate
     # obs-studio
+
+    # CPU power & clock monitoring
+    linuxKernel.packages.linux_6_18.turbostat # Intel tool but works on AMD, shows per-core MHz/watts
+    s-tui # TUI: real-time freq, temp, power, utilization graph
+
+    # Stress Tools
+    stress-ng
+
+    # Hardware info & sensors
+    lm_sensors # sensors command, hwmon
+    hwinfo # deep hardware inventory
+    dmidecode # BIOS/UEFI/board info
+
+    # General system
+    btop
+    powertop # power consumption breakdown
+
+    # Kernel / ACPI debugging
+    acpica-tools # acpidump, acpiexec — dump raw ACPI tables
+    pciutils # lspci
+    usbutils # lsusb
   ];
 
   users.users.${username} = {
@@ -65,6 +85,7 @@
     enable = true;
     openDefaultPorts = true; # Open ports in the firewall for Syncthing. (NOTE: this will not open syncthing gui port)
     user = "ove";
+    systemService = false;
   };
 
   nix.settings = {

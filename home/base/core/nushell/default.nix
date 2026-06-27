@@ -13,9 +13,9 @@
     carapace.enable = true;
     carapace.enableNushellIntegration = true;
     carapace.enableBashIntegration = true;
-    # tmux.extraConfig = ''
-    #  set-option -g default-shell ${pkgs.nushell}/bin/nu
-    # '';
+    tmux.extraConfig = ''
+      set-option -g default-shell ${pkgs.nushell}/bin/nu
+    '';
 
   };
 }

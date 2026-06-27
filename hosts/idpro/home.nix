@@ -5,6 +5,6 @@
     ../../home/work
   ];
   home.file.".config/niri/output.kdl" = {
-    source = ./niri/output.conf;
+    source = ./niri/output.kdl;
   };
 }

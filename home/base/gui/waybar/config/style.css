@@ -260,3 +260,7 @@ label:focus {
 #keyboard-state > label.locked {
     background: rgba(0, 0, 0, 0.2);
 }
+#network.wifi, #network.ethernet {
+    color: #10a140;
+    padding-left: 5px;
+}

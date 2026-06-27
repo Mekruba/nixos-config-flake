@@ -1,7 +1,6 @@
 bookmarks = [
-    "/home/ove/coppermind",
 ]
 
 [[search_dirs]]
-path = "/home/ove/repos"
-depth = 10
+path = "~/repos"
+depth = 3

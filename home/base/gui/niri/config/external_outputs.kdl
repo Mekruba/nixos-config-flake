@@ -36,3 +36,31 @@ output "Virtual-1" {
     mode "1920x1080@60"
     position x=-10000 y=0   // shove it far away
 }
+output "Samsung Electric Company C49RG9x H1AK500000" {
+    mode "5120x1440@59.977"
+    position x=-1920 y=0
+
+}
+
+
+output "Samsung Electric Company LS27C33xG H9TXA01396" {
+    mode "1920x1080@60"
+    position x=3890 y=0
+} 
+
+
+output "Samsung Electric Company LS27C33xG H9TXA01467" {
+    mode "1920x1080@60"
+    position x=1970 y=0
+} 
+
+output "Samsung Electric Company LS27C33xG H9TX200086" {
+    mode "1920x1080@60"
+    position x=-3840 y=0
+} 
+
+
+output "Samsung Electric Company LS27C33xG H9TX300305" {
+    mode "1920x1080@60"
+    position x=-1920 y=0
+} 

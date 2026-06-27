@@ -3,7 +3,7 @@
         "height": 45,
         	"modules-left": ["hyprland/workspaces"],
         "modules-center": ["custom/playerctl"],
-        	"modules-right": [ "cpu", "memory", "disk", "pulseaudio", "backlight", "network", "battery", "clock"],
+                "modules-right": ["cpu", "memory", "disk", "pulseaudio", "backlight", "network#wifi", "network#eth1", "network#eth2", "battery", "clock"],
         	"custom/nix": {
         	"format": " ",
         	"tooltip": false,
@@ -132,26 +132,29 @@
         	"tooltip-format": "{device_enumerate}",
         	"tooltip-format-enumerate-connected": "{device_alias}   {device_address}"      
         	},
-        	"network": {
-        		"interface": "wlan*",
-        		"format": "󰱓 {bandwidthTotalBytes}",
-        		"format-disconnected": "{icon} No Internet",
-        		"format-linked": "󰅛 {ifname} (No IP)",
-        		"format-alt": "󰛶 {bandwidthUpBytes} | 󰛴 {bandwidthDownBytes}",
-        		"tooltip-format": "{ifname}: {ipaddr}/{cidr} Gateway: {gwaddr}",
-        		"tooltip-format-wifi": "{icon} {essid} ({signalStrength}%)",
-        		"tooltip-format-ethernet": "{icon} {ipaddr}/{cidr}",
-        		"tooltip-format-disconnected": "{icon} Disconnected",
-        		"format-icons": {
-        			"ethernet": "󰈀",
-        			"disconnected": "⚠",
-        			"wifi": [
-        				"󰖪",
-        				""
-        			]
-        		},
-        		"interval": 2
-        	},
+                "network#wifi": {
+                    "interface": "wlp*",
+                    "format": "󰖩 {bandwidthTotalBytes}",
+                    "format-disconnected": "󰖩 DOWN",
+                    // "format-disconnected": "",
+                    "format-linked": "󰅛 {ifname} (No IP)",
+                    "format-alt": "󰛶 {bandwidthUpBytes} | 󰛴 {bandwidthDownBytes}",
+                    "tooltip-format-wifi": "󰖩 {essid} ({signalStrength}%)",
+                    "tooltip-format-disconnected": "Not connected",
+                    "interval": 2
+                },
+                "network#eth1": {
+                    "interface": "enp1s0f0",
+                    "format": "󰈀 {bandwidthTotalBytes}",
+                    "format-disconnected": "",
+                    "interval": 2
+                },
+                "network#eth2": {
+                    "interface": "enp199s0f4u1u1",
+                    "format": "󰈀 {bandwidthTotalBytes}",
+                    "format-disconnected": "",
+                    "interval": 2
+},
         	"battery": {
         	"states": {
         			"good": 100,

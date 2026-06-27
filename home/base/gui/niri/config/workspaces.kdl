@@ -7,9 +7,9 @@ workspace "browser" {
 workspace "comms" {
     open-on-output "Lenovo Group Limited L24i-30 UPB4ATVF"
 }
-workspace "music" {
+workspace "email" {
     open-on-output "Lenovo Group Limited L24i-30 UPB4ATVF"
 }
-workspace "email" {
+workspace "music" {
     open-on-output "Lenovo Group Limited L24i-30 UPB4ATVF"
 }

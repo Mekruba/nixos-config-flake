@@ -4,6 +4,7 @@
   environment.systemPackages = with pkgs; [
     olympus
     mangohud
+    protonup-qt
   ];
   programs.steam = {
     enable = true; # Master switch, already covered in installation

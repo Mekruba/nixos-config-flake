@@ -24,20 +24,22 @@
     pkgs.discord
     pkgs.taskwarrior3
     pkgs.taskwarrior-tui
+    pkgs.postgresql
+    pkgs.samba
+    pkgs.git-cliff
+    pkgs.tuigreet
     # swww
   ];
-
-  programs.obs-studio.enable = true;
-
   # If Niri is now managed by Home Manager, start the HM session wrapper:
-  services.greetd = {
-    enable = true;
-    settings.default_session = {
-      user = username;
-      command = "niri-session"; # HM generates this
-      # or: "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd $HOME/.wayland-session"
-    };
-  };
+  # services.greetd = {
+  #   enable = true;
+  #   settings.default_session = {
+  #     user = username;
+  #     command = "niri-session"; # HM generates this
+  #     # command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --cmd niri-session";
+  #     # or: "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd $HOME/.wayland-session"
+  #   };
+  # };
 
   programs.niri.enable = true;
   xdg.portal = {

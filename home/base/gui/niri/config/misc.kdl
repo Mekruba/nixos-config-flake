@@ -1,12 +1,13 @@
 // This line starts waybar, a commonly used bar for Wayland compositors.
-spawn-at-startup "waybar"
+// spawn-at-startup "waybar"
+spawn-at-startup "dms run"
 
 spawn-at-startup "wl-paste --type image --watch cliphist store"
 
 // start mako (notification daemon)
 spawn-at-startup "mako"
 
-spawn-at-startup "syncthing"
+// spawn-at-startup "syncthing"
 
 cursor {
     hide-when-typing

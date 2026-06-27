@@ -21,8 +21,8 @@
     enable = true;
     lfs.enable = true;
 
-    userName = "oveof";
-    userEmail = "ovedy@oftedal.com";
+    userName = "Mekruba";
+    userEmail = "magnus.egeland@gmail.com";
 
     # includes = [
     #   {
@@ -37,6 +37,10 @@
       # trim.bases = "develop,master,main"; # for git-trim
       push.autoSetupRemote = true;
       pull.rebase = true;
+      github.user = "Mekruba";
+
+      # host-specific override (matches the error message)
+      "github \"api.github.com\"".user = "Mekruba";
 
     };
   };

@@ -286,8 +286,8 @@ binds {
     Mod+D      { focus-workspace "comms"; }
     Mod+X      { focus-workspace "code"; }
     Mod+B      { focus-workspace "browser"; }
-    Mod+E      { focus-workspace "music"; }
-    Mod+M      { focus-workspace "email"; }
+    Mod+E      { focus-workspace "email"; }
+    Mod+M      { focus-workspace "music"; }
 
     Mod+Alt+L { spawn-sh "hyprlock"; }
 

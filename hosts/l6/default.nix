@@ -26,15 +26,16 @@
       efiSysMountPoint = "/boot"; # ← use the same mount point here.
     };
     # grub = {
-    #   enable = true;
-    #   device = "nodev";  #  "nodev"
-    #   efiSupport = true;
-    #   # useOSProber = true;
-    #   #efiInstallAsRemovable = true; # in case canTouchEfiVariables doesn't work for your system
+    #   enable = false;
     # };
   };
 
-  boot.loader.systemd-boot.enable = lib.mkForce false;
+  services.fprintd = {
+    enable = true;
+    # tod.enable = true;
+    # tod.driver = pkgs.libfprint-2-tod1-goodix;
+  };
+  boot.loader.systemd-boot.enable = lib.mkForce true;
   hardware.opengl = {
     enable = true;
   };
@@ -53,7 +54,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "iwd";
+  networking.networkmanager.wifi.backend = "wpa_supplicant";
   # networking.defaultGateway = "192.168.5.201";
 
   # This value determines the NixOS release from which the default

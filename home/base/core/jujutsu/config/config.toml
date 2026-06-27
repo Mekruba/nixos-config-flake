@@ -1,13 +1,42 @@
 [user]
-email = "ovedy@oftedal.com"
-name = "Ove Oftedal"
+email = "magnus.egeland@gmail.com"
+name = "Mekruba"
 
 [ui]
 paginate = "auto"
 editor = "nvim"
 default-command = ["log", "-n", "20", "--no-pager"]
 
+[revset-aliases]
+"mutable_roots()" = "roots(trunk()..) & mutable()"
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'closest_pushable(to)' = 'heads(::to & ~description(exact:"") & (~empty() | merges()))'
+'stack()' = 'stack(@)'
+'stack(x)' = 'stack(x, 2)'
+'stack(x, n)' = 'ancestors(reachable(x, mutable()), n)'
+
 [aliases]
+release = ["util", "exec", "--", "bash", "-c", "jj git fetch && jj tag set $1 -r main@origin && git push origin $1", "--"]
+auto = ["resolve", "--tool", "mergigraf"]
+# tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@"]
+# tug- = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+u = ["rebase", "-b@", "-d", "main@origin"]
+long = ["log", "-T", "builtin_log_detailed"] 
+# restack = ["rebase", "-o", "trunk()", "-s", "mutable_roots()"]
+restack = ["rebase", "-o", "trunk()", "-s", "roots(trunk()..) & stack()"]
+
+[merge-tools.mergiraf]
+program = "mergiraf"
+merge-args = ["merge", "$base", "$left", "$right", "-o", "$output", "-l", "$marker_length", "--fast"]
+merge-conflict-exit-codes = [1]
+
+[merge-tools.weave]
+program = "weave-driver"
+merge-args = ["$base", "$left", "$right", "-o", "$output", "-l", "$marker_length", "-p", "$path"]
+merge-conflict-exit-codes = [1]
+merge-tool-edits-conflict-markers = true
+conflict-marker-style = "git"
 
 # diff-editor = "diffconflicts"
 #

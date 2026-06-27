@@ -15,7 +15,8 @@
     ./ghostty
     ./pomodoro.nix
     ./chromium.nix
-    ./noctalia.nix
+    # ./noctalia.nix
+    ./dms.nix
     ./mako/mako.nix
     ./niri
     ./emacs
