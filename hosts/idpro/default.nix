@@ -21,6 +21,8 @@
     ./hardware-configuration.nix
   ];
 
+  nixpkgs.config.permittedInsecurePackages = [ "pnpm-10.29.2" ];
+
   # Bootloader.
   boot.loader = {
     efi = {
@@ -37,7 +39,7 @@
     # };
   };
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
   };
   hardware.cpu.amd.ryzen-smu.enable = true;
@@ -48,9 +50,22 @@
   #   pkiBundle = "/var/lib/sbctl";
   # };
 
+  security.pam.services = {
+    login.u2fAuth = true;
+    # sudo.u2fAuth = true;
+  };
+
   services.power-profiles-daemon.enable = true;
+  services.upower.enable = true;
 
   networking.hostName = "IP-P5"; # Define your hostname.
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [
+      4200
+      5063
+    ];
+  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";

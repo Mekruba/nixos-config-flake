@@ -53,6 +53,7 @@
     tlrc
     playerctl
     mlocate
+    gparted
     # obs-studio
 
     # CPU power & clock monitoring

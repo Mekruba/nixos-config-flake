@@ -8,7 +8,7 @@
     ./obsidian.nix
     ./zathura.nix
     ./waybar
-    ./rofi
+    # ./rofi
     ./thunderbird.nix
     ./spotify.nix
     ./libreoffice.nix

@@ -8,19 +8,12 @@
 }:
 {
   environment.systemPackages = [
-    pkgs.fuzzel
-    # quickshell
     pkgs.xwayland-satellite
     pkgs.xdg-desktop-portal-gnome
-    pkgs.flameshot
-    pkgs.mako
     pkgs.libvterm
     pkgs.cmake
     pkgs.libtool
     pkgs.wl-clipboard
-    pkgs.hyprlock
-    pkgs.cliphist
-    pkgs.swaylock
     pkgs.discord
     pkgs.taskwarrior3
     pkgs.taskwarrior-tui
@@ -29,6 +22,9 @@
     pkgs.git-cliff
     pkgs.tuigreet
     # swww
+    pkgs.postgresql
+    pkgs.samba
+    pkgs.git-cliff
   ];
   # If Niri is now managed by Home Manager, start the HM session wrapper:
   # services.greetd = {
@@ -45,15 +41,14 @@
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk # for gtk
+      xdg-desktop-portal-gtk
       xdg-desktop-portal-gnome
       kdePackages.xdg-desktop-portal-kde
-      # xdg-desktop-portal-kde  # for kde
     ];
   };
   environment.variables = {
     XDG_SESSION_TYPE = "wayland";
-    XDG_CURRENT_DESKTOP = "gnome";
+    XDG_CURRENT_DESKTOP = "niri";
     XDG_SESSION_DESKTOP = "niri";
     MOZ_ENABLE_WAYLAND = "1";
     GDK_BACKEND = "wayland";
