@@ -1,4 +1,4 @@
-{...}:
+{ ... }:
 {
   imports = [
     ../../base.nix
@@ -7,5 +7,6 @@
     ./firmware.nix
     ./grahpics.nix
     ./peripherals.nix
+    ./icons.nix
   ];
 }
