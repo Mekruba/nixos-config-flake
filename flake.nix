@@ -323,6 +323,48 @@
               }
             ];
           };
+
+        e16 =
+          let
+            username = "magnus";
+            specialArgs = { inherit username; };
+          in
+          nixpkgs.lib.nixosSystem {
+            inherit specialArgs;
+            system = "x86_64-linux";
+
+            modules = [
+              ./hosts/e16
+              # ./users/${username}/nixos.nix
+              # lanzaboote.nixosModules.lanzaboote
+              nix-ld.nixosModules.nix-ld
+              # nixos-hardware.nixosModules.lenovo-ideapad
+              # nixos-hardware.nixosModules.lenovo-ideapad-16ahp9
+              dms.nixosModules.dank-material-shell
+              dms.nixosModules.greeter
+
+              home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+
+                home-manager.extraSpecialArgs = inputs // specialArgs;
+                # home-manager.users.${username} = import ./hosts/g8/home.nix;
+                home-manager.users.${username} = {
+                  imports = [
+                    # dms.homeModules.dank-material-shell
+                    # dms.homeModules.niri
+                    (import ./hosts/e16/home.nix)
+                  ];
+                  home.username = username;
+                  home.homeDirectory = "/home/${username}"; # add this
+                };
+                # home-manager.services.wayland.windowManager.hyprland = {
+                #   monitor = "eDP-1,highres,auto,1.5,bitdepth,10";
+                # };
+              }
+            ];
+          };
         proxmox =
           let
             username = "ove";
