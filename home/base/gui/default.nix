@@ -3,6 +3,7 @@
   imports = [
     ./terminal
     ./discord.nix
+    ./dolphin.nix
     ./firefox.nix
     ./librewolf.nix
     ./obsidian.nix
