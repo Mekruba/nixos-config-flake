@@ -6,7 +6,7 @@
     ./zsh.nix
     ./cli-tools.nix
     ./container.nix
-    ./nushell
+    ./zsh.nix
     ./starship
     ./direnv.nix
     ./zoxide.nix

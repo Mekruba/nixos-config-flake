@@ -9,5 +9,6 @@
     ./peripherals.nix
     ./icons.nix
     # ./slippi.nix
+    ./nautilus.nix
   ];
 }

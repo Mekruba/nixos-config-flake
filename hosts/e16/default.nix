@@ -37,7 +37,7 @@
     # };
   };
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
   };
 
@@ -47,7 +47,13 @@
   #   pkiBundle = "/var/lib/sbctl";
   # };
 
+  security.pam.services = {
+    login.u2fAuth = true;
+    sudo.u2fAuth = true;
+  };
+
   services.power-profiles-daemon.enable = true;
+  services.upower.enable = true;
 
   networking.hostName = "TP-E16"; # Define your hostname.
 

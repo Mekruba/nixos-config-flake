@@ -66,6 +66,12 @@ return {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
+          fzf = {
+            fuzzy = false, -- false means it will ONLY do exact/contains matching
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
+          }
         },
         defaults = {
           mappings = {

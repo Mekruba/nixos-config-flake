@@ -3,3 +3,5 @@ window-decoration = none
 font-family = "JetBrains Mono"
 font-size = 10
 window-inherit-font-size = false
+shell-integration = zsh
+command = zsh
