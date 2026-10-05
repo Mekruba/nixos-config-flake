@@ -19,15 +19,21 @@
   programs.gh.enable = true;
   programs.git = {
     enable = true;
+    lfs.enable = true;
+
     settings = {
       user = {
         name = "Magnus";
-        email = "you@example.com";
+        email = "magnus.egeland@gmail.com";
       };
       init.defaultBranch = "main";
       pull.rebase = true;
       core.editor = "nvim";
       push.autoSetupRemote = true;
+      github.user = "Mekruba";
+
+      # host-specific override (matches the error message)
+      "github \"api.github.com\"".user = "Mekruba";
     };
   };
 }
