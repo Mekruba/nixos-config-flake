@@ -17,6 +17,14 @@
   # https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-auto-optimise-store
   nix.settings.auto-optimise-store = true;
   nix.settings = {
+    # Required by nix-direnv: the .direnv gcroot only pins the dev shell's
+    # top-level env, so without these the GC still reaps the derivation and
+    # the build inputs behind it. The symptoms are a dev shell whose binaries
+    # vanish mid-session ("command not found" after you exit a program) and
+    # direnv re-evaluating the shell from scratch instead of using its cache.
+    keep-outputs = true;
+    keep-derivations = true;
+
     substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"

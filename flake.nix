@@ -428,5 +428,25 @@
           };
 
       };
+
+      # Dev shell for hacking on this flake. Pinned to the flake's own nixpkgs
+      # via flake.lock, unlike the old shell.nix which pulled `<nixpkgs>` and
+      # therefore resolved through NIX_PATH (`nixpkgs=flake:nixpkgs`) to a
+      # mutable registry ref — a moving target that re-resolved over the
+      # network and invalidated nix-direnv's cache.
+      devShells = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            packages = [
+              pkgs.nil
+              pkgs.lua-language-server
+            ];
+          };
+        }
+      );
     };
 }
