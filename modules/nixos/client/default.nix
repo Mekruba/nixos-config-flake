@@ -8,5 +8,6 @@
     ./grahpics.nix
     ./peripherals.nix
     ./icons.nix
+    # ./slippi.nix
   ];
 }

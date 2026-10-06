@@ -22,20 +22,11 @@
     pkgs.git-cliff
     pkgs.tuigreet
     # swww
-    pkgs.postgresql
-    pkgs.samba
-    pkgs.git-cliff
   ];
-  # If Niri is now managed by Home Manager, start the HM session wrapper:
-  # services.greetd = {
-  #   enable = true;
-  #   settings.default_session = {
-  #     user = username;
-  #     command = "niri-session"; # HM generates this
-  #     # command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --cmd niri-session";
-  #     # or: "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd $HOME/.wayland-session"
-  #   };
-  # };
+
+  # Login manager is now handled centrally in sddm.nix; SDDM will launch
+  # the niri session via the desktop entry that programs.niri.enable
+  # installs, so the old greetd/tuigreet block below is no longer needed.
 
   programs.niri.enable = true;
   xdg.portal = {
@@ -46,14 +37,17 @@
       kdePackages.xdg-desktop-portal-kde
     ];
   };
+
+  # NOTE: XDG_CURRENT_DESKTOP / XDG_SESSION_DESKTOP removed — they were
+  # hardcoded to "niri" here, which would conflict with plasma.nix's
+  # session setting them to "KDE". Each session now sets these itself.
   environment.variables = {
     XDG_SESSION_TYPE = "wayland";
-    XDG_CURRENT_DESKTOP = "niri";
-    XDG_SESSION_DESKTOP = "niri";
     MOZ_ENABLE_WAYLAND = "1";
     GDK_BACKEND = "wayland";
     QT_QPA_PLATFORM = "wayland";
   };
+
   security.polkit.enable = true;
   services.gnome.gnome-keyring.enable = true;
 }

@@ -52,6 +52,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    slippi = {
+      url = "github:lytedev/slippi-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     dms = {
       url = "github:AvengeMedia/DankMaterialShell/stable";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -68,6 +73,7 @@
       lanzaboote,
       nix-ld,
       dms,
+      slippi,
       ...
     }:
     {
@@ -284,7 +290,12 @@
         idpro =
           let
             username = "magnus";
-            specialArgs = { inherit username; };
+            # slippi is passed through so ./modules/nixos/client/slippi.nix
+            # (a plain NixOS module) can resolve the flake input.
+            specialArgs = {
+              inherit username;
+              inherit (inputs) slippi;
+            };
           in
           nixpkgs.lib.nixosSystem {
             inherit specialArgs;
@@ -292,14 +303,18 @@
 
             modules = [
               ./hosts/idpro
-              ./modules/nixos/base/amd.nix
+              # ./modules/nixos/base/amd.nix
               # ./users/${username}/nixos.nix
               # lanzaboote.nixosModules.lanzaboote
               nix-ld.nixosModules.nix-ld
+
               # nixos-hardware.nixosModules.lenovo-ideapad
               nixos-hardware.nixosModules.lenovo-ideapad-16ahp9
-              dms.nixosModules.dank-material-shell
-              dms.nixosModules.greeter
+              # dms.nixosModules.dank-material-shell
+              # dms.nixosModules.greeter
+
+              # Slippi + GameCube adapter now live in
+              # ./modules/nixos/client/slippi.nix (imported by ./hosts/idpro).
 
               home-manager.nixosModules.home-manager
               {
