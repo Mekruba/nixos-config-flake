@@ -6,6 +6,7 @@
   lib,
   config,
   pkgs,
+  username,
   nixos-hardware,
   ...
 }:
@@ -22,6 +23,10 @@
   ];
 
   nixpkgs.config.permittedInsecurePackages = [ "pnpm-10.29.2" ];
+
+  # Use zsh as the default login shell on idpro.
+  programs.zsh.enable = true;
+  users.users.${username}.shell = pkgs.zsh;
 
   # Bootloader.
   boot.loader = {
