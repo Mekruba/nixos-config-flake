@@ -292,14 +292,14 @@
 
             modules = [
               ./hosts/idpro
-              ./modules/nixos/base/amd.nix
+              # ./modules/nixos/base/amd.nix
               # ./users/${username}/nixos.nix
               # lanzaboote.nixosModules.lanzaboote
               nix-ld.nixosModules.nix-ld
               # nixos-hardware.nixosModules.lenovo-ideapad
               nixos-hardware.nixosModules.lenovo-ideapad-16ahp9
-              dms.nixosModules.dank-material-shell
-              dms.nixosModules.greeter
+              # dms.nixosModules.dank-material-shell
+              # dms.nixosModules.greeter
 
               home-manager.nixosModules.home-manager
               {
