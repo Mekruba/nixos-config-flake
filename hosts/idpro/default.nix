@@ -15,6 +15,8 @@
     ../../modules/nixos/client/sddm.nix
     # ../../modules/nixos/client/dms.nix
     ../../modules/nixos/client/steam.nix
+    ../../modules/nixos/client/slippi.nix
+    ../../modules/nixos/client/wii-u-gc-adapter.nix
     # ../../modules/nixos/base/amd.nix
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -34,6 +36,9 @@
     };
     systemd-boot.enable = true;
   };
+
+  # GameCube USB adapter (overclock kmod + udev rules) and the Slippi launcher
+  # are provided by ../../modules/nixos/client/slippi.nix.
 
   hardware.graphics = {
     enable = true;
