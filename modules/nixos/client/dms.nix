@@ -6,11 +6,14 @@
       enable = true; # Systemd service for auto-start
       restartIfChanged = true; # Auto-restart dms.service when dms-shell changes
     };
-    greeter = {
-      enable = true;
-      compositor.name = "niri";
-      configHome = "/home/magnus";
-    };
+  };
+
+  # The greeter lives in its own flake now (inputs.dank-greeter); it used to be
+  # programs.dank-material-shell.greeter.
+  programs.dms-greeter = {
+    enable = true;
+    compositor.name = "niri";
+    configHome = "/home/magnus";
   };
 
   programs.dsearch = {

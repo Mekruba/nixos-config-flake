@@ -30,6 +30,7 @@
 
     # for neovim
     clang
+    tree-sitter # nvim-treesitter (main branch) builds parsers with the CLI
 
     # nix related
     #
@@ -60,6 +61,9 @@
     # TODO: FIX COLORS
     fzf = {
       enable = true;
+      # Yield Ctrl-R to atuin (home/base/tui/atuin), which is sourced after fzf.
+      # An empty command is the supported way to drop fzf's Ctrl-R binding.
+      historyWidget.command = "";
       # https://github.com/catppuccin/fzf
       # catppuccin-mocha
       colors = {

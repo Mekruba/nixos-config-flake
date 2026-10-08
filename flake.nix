@@ -62,6 +62,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # The greeter was split out of DankMaterialShell: `dms.nixosModules.greeter`
+    # is now an empty stub that only warns, and the options moved from
+    # `programs.dank-material-shell.greeter` to `programs.dms-greeter`.
+    dank-greeter = {
+      url = "github:AvengeMedia/dank-greeter";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
   outputs =
     inputs@{
@@ -73,6 +81,7 @@
       lanzaboote,
       nix-ld,
       dms,
+      dank-greeter,
       slippi,
       ...
     }:
@@ -311,7 +320,7 @@
               # nixos-hardware.nixosModules.lenovo-ideapad
               nixos-hardware.nixosModules.lenovo-ideapad-16ahp9
               # dms.nixosModules.dank-material-shell
-              # dms.nixosModules.greeter
+              # dank-greeter.nixosModules.default
 
               # Slippi + GameCube adapter now live in
               # ./modules/nixos/client/slippi.nix (imported by ./hosts/idpro).
@@ -356,7 +365,7 @@
               # nixos-hardware.nixosModules.lenovo-ideapad
               # nixos-hardware.nixosModules.lenovo-ideapad-16ahp9
               dms.nixosModules.dank-material-shell
-              dms.nixosModules.greeter
+              dank-greeter.nixosModules.default
 
               home-manager.nixosModules.home-manager
               {
